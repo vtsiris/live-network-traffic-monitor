@@ -2,13 +2,13 @@ const { spawn } = require("child_process");
 const readline = require("readline");
 const os = require("os");
 
-// Capute network packets on the interface en0
+// Capture network packets on the interface en0
 const tcpdump = spawn("tcpdump", ["-nli", "en0"]);
 
 // Get network interfaces
 const interfaces = os.networkInterfaces();
 
-// Create readline interface for reading input from sream
+// Create readline interface for reading input from stream
 // tcpdump.stdout is the readable stream
 // option 'terminal: false' specifies that input is not coming from terminal
 const rl = readline.createInterface({
@@ -34,14 +34,14 @@ const mostFrequent = [];
 rl.on("line", (line) => {
   const data = line.split(" ");
 
-  const lengthIndex = data.findIndex((d) => d === "length");
+  const lengthIndex = data?.findIndex((d) => d === "length");
 
   let senderIP = "";
   if (!!data?.[2]) {
     senderIP = data[2];
   }
 
-  const ipIndex = mostFrequent.findIndex(
+  const ipIndex = mostFrequent?.findIndex(
     (ip) => ip?.IP?.toString() === senderIP
   );
 
@@ -51,7 +51,7 @@ rl.on("line", (line) => {
     mostFrequent.push({ IP: senderIP, count: 1 });
   }
 
-  if (senderIP.slice(0, 14) === myIP) {
+  if (senderIP?.slice(0, 14) === myIP) {
     if (!!data[lengthIndex + 1]) {
       outgoingBytes += Number.parseInt(data[lengthIndex + 1]) || 0;
     }
@@ -62,10 +62,10 @@ rl.on("line", (line) => {
   }
 });
 
-mostFrequent.sort((a, b) => b?.count - a?.count);
-
 // Send results every 10 seconds
 function sendResults() {
+  mostFrequent?.sort((a, b) => b?.count - a?.count);
+
   if (!!outgoingBytes || !!incomingBytes) {
     console.log(`${outgoingBytes} bytes sent`);
     console.log(`${incomingBytes} bytes received`);
