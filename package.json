@@ -1,7 +1,7 @@
 {
   "name": "tcpreader",
   "version": "1.0.0",
-  "description": "reads tcpdump piped output from stdin",
+  "description": "collect statistics about live network traffic",
   "main": "app.js",
   "scripts": {
     "test": "npm test",
