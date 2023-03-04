@@ -1,0 +1,15 @@
+{
+  "name": "tcpreader",
+  "version": "1.0.0",
+  "description": "reads tcpdump piped output from stdin",
+  "main": "app.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node app.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
