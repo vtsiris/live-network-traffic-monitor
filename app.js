@@ -72,7 +72,9 @@ function sendResults() {
     let i = 0;
     while (i < 10) {
       if (!!mostFrequent[i]?.IP) {
-        console.log(`${mostFrequent[i]?.IP} ${mostFrequent[i]?.count}`);
+        console.log(
+          `${mostFrequent[i]?.IP} ${mostFrequent[i]?.count} connections`
+        );
       }
       i++;
     }
