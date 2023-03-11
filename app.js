@@ -16,15 +16,11 @@ const rl = readline.createInterface({
   terminal: false,
 });
 
-let myIP = "";
-
-// Filter out internal and IPv6 addresses
-const addresses = interfaces.en0.flatMap(
-  (iface) => iface?.family === "IPv4" && !iface?.internal && !!iface?.address
-);
-if (!!addresses?.length > 0) {
-  myIP = addresses[1];
-}
+// Search and set my IPv4 address
+const myIP =
+  interfaces?.en0?.find(
+    (details) => details.family === "IPv4" && !details.internal
+  )?.address || "";
 
 let outgoingBytes = 0;
 let incomingBytes = 0;
@@ -51,7 +47,7 @@ rl.on("line", (line) => {
     mostFrequent.push({ IP: senderIP, count: 1 });
   }
 
-  if (senderIP?.slice(0, 14) === myIP) {
+  if (senderIP?.slice(0, 12) === myIP) {
     if (!!data[lengthIndex + 1]) {
       outgoingBytes += Number.parseInt(data[lengthIndex + 1]) || 0;
     }
