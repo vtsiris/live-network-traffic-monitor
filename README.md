@@ -12,13 +12,13 @@ sudo npm start or sudo yarn start
 
 In this project we are capturing network packets on en0 network interface and analyzing the traffic to identify the top 10 IP addresses sending the most packets, as well as the amount of incoming and outgoing bytes.
 
-The code uses Node.js three built-in modules:
+The code uses three Node.js built-in modules:
 
 - child_process
 - readline
 - os
 
-Firstly we make use of the spawn() function from the child_process module to capture the network traffic on a specific network interfcae.
+Firstly we make use of the spawn() function from the child_process module to capture the network traffic on a specific network interface.
 The spawn function receives two arguments. The name of the command and the command line arguments.
 In our case, the command name is 'tcpdump' and the command line arguements are ["-nli", "en0"]. More thoroughly:
 
@@ -33,14 +33,14 @@ We are setting 'tcpdump?.stdout' as the readable sream and specifying that that 
 Once the readline interface is created, it can be used to listen for events emitted by the input stream, such as the line event, which is emitted every time a new line of text is available from the stream.
 
 Now we need to find our IP address.
-To do that, we will make us of the networkInterfaces() function of the 'os' module to get information about the network interfaces available on the current system. Next, we iterate through the availbale interfaces of the en0 network (the one that we are currently capturing packets) and we attempt to find the first element where the family property is equal to "IPv4" and the internal property is falsy (meaning it's not an internal or loopback interface).
+To do that, we will make us of the networkInterfaces() function of the 'os' module to get information about the network interfaces that are available on the current system. Next, we iterate through the availbale interfaces of the en0 network (the one that we are currently capturing packets) and we attempt to find the first element where the family property is equal to "IPv4" and the internal property is falsy (meaning it's not an internal or loopback interface).
 
-Moving forward, we setup a callback function that gets executed every time a new line is available in the rl interface that we previously created. The function splits the line into an array called data.
-We know that the packet length is always placed after the string 'length', so we find the index of the string 'length' in the data array and add one to retrieve the packet length
+Moving forward, we setup a callback function that gets executed every time a new line is available in the rl interface that we previously created.
 
-Next, we check if the IP address already exists in the mostFrequent array. If it does, we increase its count; otherwise, we add it to the array.
-
-Now, we need to determine if the packet is incoming or outgoing traffic. We do this by checking if the senderIP, which is located at index two of the data array, is equal to our IP address. If it is, then the traffic is outgoing; otherwise, it is incoming traffic.
+- The function splits the line into an array called 'data'.
+- Retrieve the packet length. We do that by knowing that the packet length is always placed after the string 'length', so we find the index of the string 'length' in the data array and add one to retrieve it.
+- Check if the IP address already exists in the mostFrequent array. If it does, we increase its count; otherwise, we add it to the array.
+- Determine if the packet is incoming or outgoing traffic. We do this by checking if the senderIP, which is located at index two of the data array, is equal to our IP address. If it is, then the traffic is outgoing; otherwise, it is incoming traffic.
 
 Finally, we create a function that is doing the following every 10 seconds:
 
